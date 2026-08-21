@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>聽寫俠｜免費語音輸入轉文字（繁中優先・可全本機運算）— 免安裝免帳號</title>
+<meta name="description" content="說話變文字，免費免安裝：三種引擎可選——瀏覽器內建（最快）、本機 Whisper（錄音不出機器、100% 隱私）、自帶 API key（最高品質）。支援繁中與中英混合，適合筆記、長文、回覆訊息。">
+<meta name="keywords" content="語音輸入, 語音轉文字, 聽寫, 免費語音辨識, 繁體中文 語音輸入, 中英混合 語音, whisper 線上, 本機語音辨識, 打字慢 替代">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yam4111887-gif.github.io/dictation-pal/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="聽寫俠">
+<meta property="og:title" content="聽寫俠 — 免費語音輸入轉文字（繁中優先）">
+<meta property="og:description" content="說話變文字。三引擎：瀏覽器內建／本機 Whisper（隱私）／自帶 key。免安裝免帳號。">
+<meta property="og:url" content="https://yam4111887-gif.github.io/dictation-pal/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "聽寫俠",
+  "url": "https://yam4111887-gif.github.io/dictation-pal/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-Hant",
+  "description": "免費語音輸入轉文字工具：三引擎（瀏覽器內建／本機 Whisper／BYOK API），繁中與中英混合優先。",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="mark">🎙️</span>聽寫俠</a>
+    <nav class="nav-links">
+      <a href="#tool">開始聽寫</a>
+      <a href="#engines">三引擎說明</a>
+      <a href="about.html">關於</a>
+      <a href="privacy.html">隱私</a>
+    </nav>
+  </div>
+</header>
+
+<section id="hero">
+  <h1>說話，比打字快三倍</h1>
+  <p class="hero-sub">把「說的」變成「寫的」：筆記、長文、回訊息都好用。三種引擎自由選——要最快、要最隱私、還是要最高品質，你決定。</p>
+  <div class="badges">
+    <span class="badge">🆓 免費免安裝免帳號</span>
+    <span class="badge">🔒 本機模式：錄音不出你的電腦</span>
+    <span class="badge">🇹🇼 繁中＋中英混合優先</span>
+  </div>
+</section>
+
+<main>
+  <dialog id="dlg-settings">
+    <h3>API 引擎設定（選用）</h3>
+    <p style="font-size:.82rem;color:var(--muted)">使用 OpenAI 相容語音轉錄 API（如 OpenAI Whisper API）。金鑰只存在你的瀏覽器。錄音會直接從你的瀏覽器送至你設定的端點。</p>
+    <div class="field">
+      <label for="set-endpoint">API 端點</label>
+      <input id="set-endpoint" placeholder="https://api.openai.com/v1">
+    </div>
+    <div class="field">
+      <label for="set-key">API Key</label>
+      <input id="set-key" type="password" placeholder="sk-...">
+    </div>
+    <div class="field">
+      <label for="set-model">模型名稱</label>
+      <input id="set-model" placeholder="whisper-1">
+    </div>
+    <div class="dialog-actions">
+      <button class="ghost" id="btn-close-settings">關閉</button>
+      <button class="primary" id="btn-save-settings">儲存</button>
+    </div>
+  </dialog>
+
+  <section class="card" id="engines">
+    <h2>選擇引擎</h2>
+    <div class="engine-grid">
+      <div class="engine selected" data-engine="web">
+        <h3>⚡ 瀏覽器內建</h3>
+        <div class="desc">最快上手，即時顯示文字。使用瀏覽器內建辨識（需 Chrome/Edge，連線 Google 伺服器）。</div>
+        <div class="status status-ok" id="status-web">檢查中…</div>
+      </div>
+      <div class="engine" data-engine="local">
+        <h3>🔒 本機 Whisper</h3>
+        <div class="desc">AI 模型直接在你的瀏覽器裡跑，錄音不上傳任何伺服器。首次使用需下載模型（約 80-150MB，之後有快取）。中長句建議用這個。</div>
+        <div class="status status-ok" id="status-local">檢查中…</div>
+      </div>
+      <div class="engine" data-engine="api">
+        <h3>🎯 自帶 API</h3>
+        <div class="desc">用你自己的 OpenAI 相容語音 API（如 Whisper API），品質最高。需設定金鑰。</div>
+        <div class="status status-warn" id="status-api">未設定</div>
+      </div>
+    </div>
+    <div class="model-progress" id="model-progress"></div>
+  </section>
+
+  <section class="card" id="tool">
+    <h2>聽寫</h2>
+    <div class="record-row">
+      <button class="btn-rec" id="btn-rec" title="開始 / 停止" aria-label="開始或停止錄音">🎙️</button>
+      <div>
+        <div class="rec-state" id="rec-state">就緒</div>
+        <div class="rec-hint" id="rec-hint">點麥克風開始。瀏覽器會詢問麥克風權限。</div>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <textarea id="transcript" placeholder="你的文字會出現在這裡（也可以直接編輯）"></textarea>
+      <div id="interim"></div>
+    </div>
+    <div class="actions-row">
+      <button class="primary" id="btn-copy">📋 複製</button>
+      <button class="ghost" id="btn-punct">✨ 整理標點</button>
+      <button class="ghost" id="btn-download">⬇️ 下載 .txt</button>
+      <button class="ghost" id="btn-clear">清空</button>
+      <span class="counter" id="counter">0 字</span>
+    </div>
+    <div class="notice">
+      誠實說明：語音辨識一定會有錯字——本機引擎對中英混合句的辨識尤其仍在進化中，重要內容請檢查後再使用。各引擎的資料流向詳見<a href="privacy.html">隱私說明</a>。
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🕘 最近聽寫（只存在你的瀏覽器）</h2>
+    <div id="hist-list"></div>
+    <p class="empty" id="hist-empty" hidden>還沒有記錄</p>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="logo" style="font-size:1rem"><span class="mark">🎙️</span>聽寫俠</div>
+    <nav class="footer-links">
+      <a href="about.html">關於</a>
+      <a href="privacy.html">隱私說明</a>
+      <a href="terms.html">使用條款</a>
+    </nav>
+    <div class="footer-note">© 2026 聽寫俠 — 免費語音輸入工具。AI 轉錄內容請自行校對；本工具不收集任何資料。</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

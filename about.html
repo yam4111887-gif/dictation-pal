@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>關於聽寫俠 — 為什麼免費、三引擎怎麼選</title>
+<meta name="description" content="聽寫俠是免費網頁版語音輸入工具：三引擎（瀏覽器內建／本機 Whisper／自帶 API）、免安裝、不收集資料。了解設計理念與未來計畫。">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yam4111887-gif.github.io/dictation-pal/about.html">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="mark">🎙️</span>聽寫俠</a>
+    <nav class="nav-links">
+      <a href="index.html#tool">開始聽寫</a>
+      <a href="privacy.html">隱私</a>
+      <a href="terms.html">使用條款</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page">
+  <h1>關於聽寫俠</h1>
+  <p>聽寫俠是 2026 年上線的免費網頁語音輸入工具。起源：市面上的語音聽寫產品要嘛是雲端訂閱制（月費＋錄音上傳）、要嘛不支援繁中與中英混合。我們想做一個「打開連結就能用、而且可以完全本機運算」的選擇。</p>
+
+  <h2>三引擎怎麼選</h2>
+  <ul>
+    <li><strong>瀏覽器內建</strong>：最快、即時顯示，適合短訊息與筆記。辨識經瀏覽器連線其語音服務（詳見隱私說明）。</li>
+    <li><strong>本機 Whisper</strong>：AI 模型在你的瀏覽器裡執行，錄音不出你的電腦。首次下載模型後離線可用，適合隱私敏感內容。</li>
+    <li><strong>自帶 API</strong>：用你自己的 OpenAI 相容語音 API，長句與專有名詞品質最好，費用與額度是你與該服務之間的事。</li>
+  </ul>
+
+  <h2>為什麼是網頁、不是 App？</h2>
+  <p>零安裝、零更新、跨裝置——傳一個連結任何人都能用。桌機安裝版（全域快捷鍵、在任何軟體裡聽寫）在規劃中，等網頁版累積使用回饋後推出。</p>
+
+  <h2>誠實的限制</h2>
+  <p>語音辨識必然有錯字；本機引擎（whisper-base 等級）對中英混合句的準確率仍在可用但需校對的範圍。工具提供「整理標點」輔助，但<strong>重要文件請務必校對</strong>。我們不假裝它完美。</p>
+
+  <h2>商業模式</h2>
+  <p>目前完全免費、無廣告。未來可能：放置廣告或推出雲端便利方案（自帶 key 永遠免費）。任何變更都會在本頁與隱私說明揭露。</p>
+
+  <h2>技術與授權</h2>
+  <p>本機引擎基於開源 <a href="https://github.com/huggingface/transformers.js" target="_blank" rel="noopener">transformers.js</a> 與 OpenAI Whisper 開源模型（MIT 授權），於瀏覽器端執行。</p>
+
+  <h2>聯絡</h2>
+  <p><a href="mailto:yassintw@gmail.com">yassintw@gmail.com</a></p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="logo" style="font-size:1rem"><span class="mark">🎙️</span>聽寫俠</div>
+    <nav class="footer-links">
+      <a href="about.html">關於</a>
+      <a href="privacy.html">隱私說明</a>
+      <a href="terms.html">使用條款</a>
+    </nav>
+    <div class="footer-note">© 2026 聽寫俠 — 免費語音輸入工具。AI 轉錄內容請自行校對；本工具不收集任何資料。</div>
+  </div>
+</footer>
+</body>
+</html>

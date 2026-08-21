@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>隱私說明 — 聽寫俠</title>
+<meta name="robots" content="noindex, follow">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="mark">🎙️</span>聽寫俠</a>
+    <nav class="nav-links">
+      <a href="index.html#tool">開始聽寫</a>
+      <a href="about.html">關於</a>
+      <a href="terms.html">使用條款</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page">
+  <h1>隱私說明（依引擎分別揭露）</h1>
+  <div class="page-date">最後更新：2026 年 8 月 21 日</div>
+
+  <h2>本站本身</h2>
+  <p>聽寫俠是純靜態網頁：沒有帳號、沒有後端伺服器、沒有資料庫、不使用 Cookie 與任何分析追蹤。你的文字與歷史記錄只存在<strong>你自己瀏覽器的 localStorage</strong>，清除瀏覽器資料即完全刪除。</p>
+
+  <h2>引擎一：瀏覽器內建辨識</h2>
+  <p>使用瀏覽器（Chrome/Edge）內建的 Web Speech API。<strong>你的語音會經由瀏覽器送往其語音服務（Google）進行辨識</strong>——這是瀏覽器內建功能的行為，不是本站控制。麥克風權限由瀏覽器管理，可隨時收回。在意錄音外流者請改用本機引擎。</p>
+
+  <h2>引擎二：本機 Whisper</h2>
+  <p>AI 模型下載後<strong>完全在你的瀏覽器內執行</strong>：錄音與轉錄過程不會上傳到任何伺服器。模型檔案來自公開的 CDN（jsDelivr／Hugging Face），下載行為僅取得模型本身。</p>
+
+  <h2>引擎三：自帶 API</h2>
+  <p>錄音檔會<strong>直接從你的瀏覽器送至你自己設定的 API 端點</strong>（例如 OpenAI）。金鑰只存在你的瀏覽器。該服務如何處理你的音檔，適用其隱私政策，請自行查閱。</p>
+
+  <h2>外部資源</h2>
+  <p>本頁載入 jsDelivr CDN 的開源程式庫；使用本機引擎時會從 Hugging Face CDN 下載模型。這些請求由 CDN 服務商記錄 IP 等技術資訊。</p>
+
+  <h2>未來若導入廣告</h2>
+  <p>將於本頁更新並說明第三方 Cookie 政策；工具核心功能與本機引擎的隱私保證不變。</p>
+
+  <h2>聯絡</h2>
+  <p><a href="mailto:yassintw@gmail.com">yassintw@gmail.com</a></p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="logo" style="font-size:1rem"><span class="mark">🎙️</span>聽寫俠</div>
+    <nav class="footer-links">
+      <a href="about.html">關於</a>
+      <a href="privacy.html">隱私說明</a>
+      <a href="terms.html">使用條款</a>
+    </nav>
+    <div class="footer-note">© 2026 聽寫俠 — 免費語音輸入工具。AI 轉錄內容請自行校對；本工具不收集任何資料。</div>
+  </div>
+</footer>
+</body>
+</html>
