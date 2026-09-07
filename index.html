@@ -85,7 +85,11 @@
       </div>
       <div class="engine" data-engine="local">
         <h3>🔒 本機 Whisper</h3>
-        <div class="desc">AI 模型直接在你的瀏覽器裡跑，錄音不上傳任何伺服器。首次使用需下載模型（約 80-150MB，之後有快取）。中長句建議用這個。</div>
+        <div class="desc">AI 模型直接在你的瀏覽器裡跑，錄音不上傳任何伺服器。首次使用需下載模型（之後有快取）。中長句建議用這個。</div>
+        <div class="model-row">模型：
+          <button class="model-btn" data-model="tiny" type="button" title="最快、檔案小，準確度略降">Tiny（快・約 40MB）</button>
+          <button class="model-btn selected" data-model="base" type="button" title="建議：速度與準確度平衡">Base（建議・約 80MB）</button>
+        </div>
         <div class="status status-ok" id="status-local">檢查中…</div>
       </div>
       <div class="engine" data-engine="api">

@@ -111,3 +111,8 @@ footer { border-top: 1px solid var(--border); background: var(--card); margin-to
 .footer-links { display: flex; gap: 14px; flex-wrap: wrap; margin-left: auto; }
 .footer-links a { color: var(--muted); text-decoration: none; font-size: .86rem; }
 .footer-note { width: 100%; color: var(--muted); font-size: .76rem; }
+
+/* 模型分級選擇器 v1.5 */
+.model-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.82rem;margin:8px 0 4px;color:var(--muted,#667)}
+.model-btn{border:1px solid var(--border,#d8d4c8);background:#fff;border-radius:999px;padding:3px 12px;font-size:.78rem;cursor:pointer;font-family:inherit;color:inherit}
+.model-btn.selected{background:#0f766e;color:#fff;border-color:#0f766e;font-weight:600}

@@ -61,6 +61,18 @@ function saveSettings(s) {
     els.statusLocal.textContent = "△ 可用（無 WebGPU，用 CPU 跑，較慢但可用）";
   }
 
+  /* 麥克風權限預檢（支援的瀏覽器才會回報） */
+  if (navigator.permissions && navigator.permissions.query) {
+    navigator.permissions
+      .query({ name: "microphone" })
+      .then((p) => {
+        if (p.state === "denied") {
+          els.recHint.textContent = "⚠ 偵測到麥克風權限是「封鎖」狀態——請點網址列左邊的鎖頭允許麥克風，再重新整理。";
+        }
+      })
+      .catch(() => { /* 不支援查詢的瀏覽器靜默略過 */ });
+  }
+
   const s = loadSettings();
   if (s.apiKey) {
     els.statusApi.textContent = "✓ 已設定（點引擎卡片旁的 ⚙ 修改）";
@@ -126,10 +138,13 @@ function webStart() {
   };
   webRec.onerror = (ev) => {
     if (ev.error === "not-allowed") {
-      alert("麥克風權限被拒絕了——請在網址列的權限設定允許麥克風。");
+      els.recState.textContent = "無法開始";
+      els.recHint.textContent = "麥克風權限被拒絕——請點網址列左邊的鎖頭 → 允許麥克風，再試一次。";
       stopRecording();
     } else if (ev.error === "network") {
-      alert("瀏覽器內建辨識需要網路連線。請改用「本機 Whisper」引擎（離線可用）。");
+      els.recState.textContent = "已自動切換引擎";
+      els.recHint.textContent = "瀏覽器內建辨識需要網路連線，已切換到「本機 Whisper」（離線可用）。請再按一次錄音。";
+      selectEngine("local");
       stopRecording();
     }
     /* no-speech / aborted 靜默處理，由 onend 重啟邏輯接手 */
@@ -144,17 +159,40 @@ function webStart() {
 
 /* ---------- 引擎 2：本機 Whisper（transformers.js） ---------- */
 
-let localPipeline = null;
+/* 模型分級：Tiny（快）／Base（建議）。可各自快取，切換不會互相覆蓋。 */
+const MODELS = {
+  tiny: { id: "onnx-community/whisper-tiny", label: "Tiny" },
+  base: { id: "onnx-community/whisper-base", label: "Base" },
+};
+const localPipelines = {};
 let mediaRecorder = null;
 let audioChunks = [];
 
+function currentModelKey() {
+  return loadSettings().localModel || "base";
+}
+
+document.querySelectorAll(".model-btn").forEach((btn) =>
+  btn.addEventListener("click", () => {
+    const k = btn.dataset.model;
+    const s = loadSettings();
+    s.localModel = k;
+    saveSettings(s);
+    document.querySelectorAll(".model-btn").forEach((b) => b.classList.toggle("selected", b.dataset.model === k));
+    els.modelProgress.textContent =
+      `已選 ${MODELS[k].label} 模型` + (localPipelines[MODELS[k].id] ? "（已就緒）" : "（下次錄音時下載）");
+  })
+);
+document.querySelectorAll(".model-btn").forEach((b) => b.classList.toggle("selected", b.dataset.model === currentModelKey()));
+
 async function ensureLocalModel() {
-  if (localPipeline) return localPipeline;
-  els.modelProgress.textContent = "正在下載本機語音模型（首次約 80-150MB，之後有快取）…";
+  const modelId = MODELS[currentModelKey()].id;
+  if (localPipelines[modelId]) return localPipelines[modelId];
+  els.modelProgress.textContent = `正在下載 ${currentModelKey() === "tiny" ? "Tiny（約 40MB" : "Base（約 80MB"}，首次較久，之後有快取）…`;
   const { pipeline, env } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.1");
   env.allowLocalModels = false;
   const device = navigator.gpu ? "webgpu" : "wasm";
-  localPipeline = await pipeline("automatic-speech-recognition", "onnx-community/whisper-base", {
+  localPipelines[modelId] = await pipeline("automatic-speech-recognition", modelId, {
     device,
     dtype: "q8",
     progress_callback: (p) => {
@@ -164,7 +202,7 @@ async function ensureLocalModel() {
     },
   });
   els.modelProgress.textContent = "✓ 本機模型已就緒（之後開啟不用重新下載）";
-  return localPipeline;
+  return localPipelines[modelId];
 }
 
 async function blobToFloat32(blob) {
@@ -182,11 +220,24 @@ async function blobToFloat32(blob) {
   return out;
 }
 
+/* 長音訊分段轉錄：每段 30 秒，避免一次餵太長導致當機或幻覺 */
 async function localTranscribe(blob) {
   const asr = await ensureLocalModel();
   const audio = await blobToFloat32(blob);
-  const out = await asr(audio, { language: "chinese", task: "transcribe" });
-  return (out && out.text ? out.text : "").trim();
+  const CHUNK = 16000 * 30;
+  if (audio.length <= CHUNK) {
+    const out = await asr(audio, { language: "chinese", task: "transcribe" });
+    return (out && out.text ? out.text : "").trim();
+  }
+  const total = Math.ceil(audio.length / CHUNK);
+  const parts = [];
+  for (let i = 0; i < total; i++) {
+    els.recState.textContent = `⏳ 轉錄中… 第 ${i + 1}/${total} 段`;
+    const seg = audio.subarray(i * CHUNK, Math.min((i + 1) * CHUNK, audio.length));
+    const out = await asr(seg, { language: "chinese", task: "transcribe" });
+    if (out && out.text) parts.push(out.text.trim());
+  }
+  return parts.join("\n");
 }
 
 /* ---------- 引擎 3：BYOK API（OpenAI 相容 /audio/transcriptions） ---------- */
