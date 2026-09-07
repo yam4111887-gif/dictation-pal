@@ -31,6 +31,36 @@ const els = {
 let engine = "web";
 let recording = false;
 
+/* ---------- 辨識語言（多語言支援） ---------- */
+
+/* speech=Web Speech API 的 BCP-47 代碼；whisper=transformers.js 語言名；api=OpenAI API ISO 碼（null=自動） */
+const LANGS = {
+  "zh-TW": { speech: "zh-TW", whisper: "chinese", api: "zh" },
+  auto:    { speech: null,    whisper: null,      api: null },
+  en:      { speech: "en-US", whisper: "english",  api: "en" },
+  ja:      { speech: "ja-JP", whisper: "japanese", api: "ja" },
+  ko:      { speech: "ko-KR", whisper: "korean",   api: "ko" },
+  yue:     { speech: "zh-HK", whisper: "cantonese", api: null },
+  vi:      { speech: "vi-VN", whisper: "vietnamese", api: "vi" },
+  th:      { speech: "th-TH", whisper: "thai",     api: "th" },
+  id:      { speech: "id-ID", whisper: "indonesian", api: "id" },
+};
+
+function currentLang() {
+  const v = $("lang-select").value;
+  return LANGS[v] ? v : "zh-TW";
+}
+
+$("lang-select").addEventListener("change", () => {
+  const s = loadSettings();
+  s.lang = currentLang();
+  saveSettings(s);
+});
+(function initLang() {
+  const saved = loadSettings().lang;
+  if (saved && LANGS[saved]) $("lang-select").value = saved;
+})();
+
 function loadSettings() {
   try {
     return JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
@@ -122,7 +152,7 @@ let webFinalText = "";
 function webStart() {
   webFinalText = els.transcript.value ? els.transcript.value.trimEnd() + "\n" : "";
   webRec = new SR();
-  webRec.lang = "zh-TW";
+  webRec.lang = LANGS[currentLang()].speech || navigator.language || "zh-TW";
   webRec.continuous = true;
   webRec.interimResults = true;
   webRec.onresult = (ev) => {
@@ -221,12 +251,18 @@ async function blobToFloat32(blob) {
 }
 
 /* 長音訊分段轉錄：每段 30 秒，避免一次餵太長導致當機或幻覺 */
+function whisperOpts() {
+  const w = LANGS[currentLang()].whisper;
+  return w ? { language: w, task: "transcribe" } : { task: "transcribe" }; /* null=自動偵測 */
+}
+
 async function localTranscribe(blob) {
   const asr = await ensureLocalModel();
   const audio = await blobToFloat32(blob);
   const CHUNK = 16000 * 30;
+  const opts = whisperOpts();
   if (audio.length <= CHUNK) {
-    const out = await asr(audio, { language: "chinese", task: "transcribe" });
+    const out = await asr(audio, opts);
     return (out && out.text ? out.text : "").trim();
   }
   const total = Math.ceil(audio.length / CHUNK);
@@ -234,7 +270,7 @@ async function localTranscribe(blob) {
   for (let i = 0; i < total; i++) {
     els.recState.textContent = `⏳ 轉錄中… 第 ${i + 1}/${total} 段`;
     const seg = audio.subarray(i * CHUNK, Math.min((i + 1) * CHUNK, audio.length));
-    const out = await asr(seg, { language: "chinese", task: "transcribe" });
+    const out = await asr(seg, opts);
     if (out && out.text) parts.push(out.text.trim());
   }
   return parts.join("\n");
@@ -248,6 +284,8 @@ async function apiTranscribe(blob) {
   const fd = new FormData();
   fd.append("file", blob, "audio.webm");
   fd.append("model", s.model || "whisper-1");
+  const apiLang = LANGS[currentLang()].api;
+  if (apiLang) fd.append("language", apiLang);
   const res = await fetch((s.endpoint || "https://api.openai.com/v1").replace(/\/+$/, "") + "/audio/transcriptions", {
     method: "POST",
     headers: { Authorization: `Bearer ${s.apiKey}` },
