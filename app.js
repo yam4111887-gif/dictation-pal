@@ -1,3 +1,7 @@
+'use strict';
+const REC_SVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg>';
+const COPY_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+const CHECK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
 "use strict";
 
 /* 聽寫俠 — 三引擎語音轉文字。全部在使用者瀏覽器執行，無後端。
@@ -340,13 +344,13 @@ async function toggleRecording() {
       els.recHint.textContent = "再點一次結束。說話之間停頓沒關係，會自動繼續。";
     } else {
       await startMicRecording();
-      els.recState.textContent = engine === "local" ? "🔴 錄音中（本機，結束後轉錄）" : "🔴 錄音中（結束後送 API 轉錄）";
+      els.recState.textContent = engine === "local" ? "錄音中（本機，結束後轉錄）" : "錄音中（結束後送 API 轉錄）";
       els.recHint.textContent = "再點一次結束並開始轉錄。";
     }
   } catch (e) {
     recording = false;
     els.btnRec.classList.remove("recording");
-    els.btnRec.textContent = "🎙️";
+    els.btnRec.innerHTML = REC_SVG;
     els.recState.textContent = "無法開始";
     els.recHint.textContent = String(e.message || e);
     if (String(e.name) === "NotAllowedError") {
@@ -358,7 +362,7 @@ async function toggleRecording() {
 async function stopRecording() {
   recording = false;
   els.btnRec.classList.remove("recording");
-  els.btnRec.textContent = "🎙️";
+  els.btnRec.innerHTML = REC_SVG;
   els.interim.textContent = "";
 
   if (engine === "web") {
@@ -371,7 +375,7 @@ async function stopRecording() {
     return;
   }
 
-  els.recState.textContent = "⏳ 轉錄中…（本機模型可能需要數十秒）";
+  els.recState.textContent = "轉錄中…（本機模型可能需要數十秒）";
   try {
     const blob = await stopMicRecording();
     if (!blob || !blob.size) throw new Error("沒有錄到聲音");
@@ -401,8 +405,8 @@ els.transcript.addEventListener("input", updateCounter);
 els.btnCopy.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(els.transcript.value);
-    els.btnCopy.textContent = "✅ 已複製";
-    setTimeout(() => (els.btnCopy.textContent = "📋 複製"), 1200);
+    els.btnCopy.innerHTML = CHECK_SVG + " 已複製";
+    setTimeout(() => (els.btnCopy.innerHTML = COPY_SVG + " 複製"), 1200);
   } catch {
     alert("複製失敗，請手動選取。");
   }

@@ -55,7 +55,16 @@
     <span class="badge">本機模式：錄音不出你的電腦</span>
     <span class="badge">繁中＋中英混合優先</span>
   </div>
+<div class="hero-cta">
+  <a class="btn-cta primary" href="#tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg> 開始聽寫</a>
+  <a class="btn-cta ghost" href="#engines"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg> 認識三引擎</a>
+</div>
 </section>
+<div class="stats-band" role="list" aria-label="特色速覽">
+  <div class="stat" role="listitem"><b>3</b><span>種引擎：最快、最隱私、最高品質</span></div>
+  <div class="stat" role="listitem"><b>9</b><span>種辨識語言（繁中與中英混合優先）</span></div>
+  <div class="stat" role="listitem"><b>100%</b><span>本機模式：錄音不出你的機器</span></div>
+</div>
 
 <main id="main-content">
   <dialog id="dlg-settings">
@@ -108,7 +117,7 @@
   <section class="card" id="tool">
     <h2>聽寫</h2>
     <div class="record-row">
-      <button class="btn-rec" id="btn-rec" title="開始 / 停止" aria-label="開始或停止錄音">🎙️</button>
+      <button class="btn-rec" id="btn-rec" title="開始 / 停止" aria-label="開始或停止錄音"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></button>
       <div>
         <div class="rec-state" id="rec-state">就緒</div>
         <div class="rec-hint" id="rec-hint">點麥克風開始。瀏覽器會詢問麥克風權限。</div>
@@ -133,9 +142,9 @@
       <div id="interim"></div>
     </div>
     <div class="actions-row">
-      <button class="primary" id="btn-copy">📋 複製</button>
-      <button class="ghost" id="btn-punct">✨ 整理標點</button>
-      <button class="ghost" id="btn-download">⬇️ 下載 .txt</button>
+      <button class="primary" id="btn-copy"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> 複製</button>
+      <button class="ghost" id="btn-punct"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4M22 4h-4"/></svg> 整理標點</button>
+      <button class="ghost" id="btn-download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg> 下載 .txt</button>
       <button class="ghost" id="btn-clear">清空</button>
       <span class="counter" id="counter">0 字</span>
     </div>
@@ -149,17 +158,37 @@
     <div id="hist-list"></div>
     <p class="empty" id="hist-empty" hidden>還沒有記錄</p>
   </section>
+<section class="cta-band" aria-label="開始聽寫">
+  <h2>今天的想法，用說的就好</h2>
+  <p>按一下麥克風，說完即成文字——不用安裝、不用註冊，重要內容檢查後即可使用。</p>
+  <a class="btn-cta primary" href="#tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg> 開始聽寫</a>
+</section>
 </main>
 
-<footer>
-  <div class="footer-inner">
-    <div class="logo" style="font-size:1rem"><span class="mark"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span>聽寫俠</div>
-    <nav class="footer-links">
-      <a href="about.html">關於</a>
-      <a href="privacy.html">隱私說明</a>
-      <a href="terms.html">使用條款</a>
-    </nav>
-    <div class="footer-note">© 2026 聽寫俠 — 免費語音輸入工具。AI 轉錄內容請自行校對；本工具不收集任何資料。</div>
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="f-brand">
+      <div class="logo"><span class="mark"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span> 聽寫俠</div>
+      <p class="f-tag">說話變文字的免費工具。三種引擎自由選擇，繁中與中英混合優先，錄音可以全程不出你的機器。</p>
+    </div>
+      <div class="f-col">
+        <h4>開始用</h4>
+        <a href="index.html#tool">開始聽寫</a>
+        <a href="index.html#engines">三引擎說明</a>
+        <a href="free-ai.html">免費 AI 語音比較</a>
+      </div>
+      <div class="f-col">
+        <h4>站內資源</h4>
+        <a href="about.html">關於聽寫俠</a>
+        <a href="privacy.html">隱私說明</a>
+        <a href="terms.html">使用條款</a>
+      </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <span class="f-note">© 2026 聽寫俠 — 免費語音輸入工具。AI 轉錄內容請自行校對；本工具不收集任何資料。</span>
+      <a class="to-top" href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> 回到頂端</a>
+    </div>
   </div>
 </footer>
 
